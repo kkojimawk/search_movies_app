@@ -38,6 +38,20 @@ const App = () => {
     }
   };
 
+  const moviePlotDisplay = async (imdbID) => {
+    setErrorMessage(null);
+    const response = await fetch(
+      `http://www.omdbapi.com/?i=${imdbID}&plot=full&apikey=5d5e96a9`
+    );
+    const jsonResponse = await response.json();
+    if (jsonResponse.Response === "True") {
+      console.log(jsonResponse.Plot);
+    }
+    if (jsonResponse.Response === "False") {
+      setErrorMessage(jsonResponse.Error);
+    }
+  };
+
   return (
     <div className="App">
       <Header text="HOOKED" />
@@ -50,7 +64,11 @@ const App = () => {
           <div className="errorMessage">{errorMessage}</div>
         ) : (
           movies.map((movie, index) => (
-            <Movie key={`${index}-${movie.Title}`} movie={movie} />
+            <Movie
+              key={`${index}-${movie.Title}`}
+              movie={movie}
+              moviePlotDisplay={moviePlotDisplay}
+            />
           ))
         )}
       </div>
